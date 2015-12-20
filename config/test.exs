@@ -1,5 +1,9 @@
 use Mix.Config
 
+# ease up hashing time when in test mode
+config :comeonin, :bcrypt_log_rounds, 4
+config :comeonin, :pbkdf2_rounds, 1
+
 # We don't run a server during test. If one is required,
 # you can enable the server option below.
 config :rumbl, Rumbl.Endpoint,
@@ -15,7 +19,7 @@ config :phoenix, :stacktrace_depth, 20
 # Configure your database
 config :rumbl, Rumbl.Repo,
   adapter: Ecto.Adapters.Postgres,
-  username: "postgres",
-  password: "postgres",
+  username: "tony",
+  password: "t0sh12004M{T",
   database: "rumbl_test",
   pool: Ecto.Adapters.SQL.Sandbox

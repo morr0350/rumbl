@@ -4,6 +4,11 @@ defmodule Rumbl.Auth do
     import Phoenix.Controller
     alias Rumbl.Router.Helpers
 
+    defp put_current_user(conn, user) do
+        conn
+        |> assign(:current_user, user)
+    end
+
     def authenticate_user(conn, _opts) do
         if conn.assigns.current_user do
             conn
@@ -21,8 +26,14 @@ defmodule Rumbl.Auth do
 
     def call(conn, repo) do
         user_id = get_session(conn, :user_id)
-        user    = user_id && repo.get(Rumbl.User, user_id)
-        assign(conn, :current_user, user)
+        cond do
+            user = conn.assigns[:current_user] ->
+                put_current_user(conn, user)
+            user = user_id && repo.get(Rumbl.User, user_id) ->
+                put_current_user(conn, user)
+            true ->
+                assign(conn, :current_user, nil)
+        end
     end
 
     def login(conn, user) do
